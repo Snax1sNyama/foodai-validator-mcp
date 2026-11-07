@@ -35,9 +35,8 @@ def validate_recommendation(name: str, price: float, user_budget: float) -> Dict
     ]
     name_lower = dish.name.lower()
 
-    if any(pattern in name_lower for pattern in suspicious_patterns):
-        if len(dish.name.split()) > 3:
-            errors.append("Обнаружена попытка Prompt Injection (подозрительный паттерн в названии)")
+     if any(pattern in name_lower for pattern in suspicious_patterns):
+     errors.append("Обнаружена попытка Prompt Injection (подозрительный паттерн в названии)")
 
     if errors:
         return {"is_valid": False, "errors": errors}
