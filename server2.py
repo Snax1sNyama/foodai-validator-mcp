@@ -33,9 +33,9 @@ def validate_recommendation(name: str, price: float, user_budget: float) -> Dict
         "system", "prompt", "ignore", "instructions", "exec", "eval",
         "систем", "промпт", "игнорир", "инструкц", "выведи", "забудь"
     ]
-    name_lower = dish.name.lower()
-
-     if any(pattern in name_lower for pattern in suspicious_patterns):
+     name_lower = dish.name.lower()
+ 
+ if any(pattern in name_lower for pattern in suspicious_patterns):
      errors.append("Обнаружена попытка Prompt Injection (подозрительный паттерн в названии)")
 
     if errors:
