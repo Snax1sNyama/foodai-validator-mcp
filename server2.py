@@ -4,11 +4,9 @@ from typing import Dict, Any
 
 mcp = FastMCP("FoodAI-Validator")
 
-
 class DishInput(BaseModel):
     name: str = Field(..., max_length=100, description="Название блюда")
     price: float = Field(..., ge=0, description="Цена должна быть положительной")
-
 
 @mcp.tool()
 def validate_recommendation(name: str, price: float, user_budget: float) -> Dict[str, Any]:
@@ -17,7 +15,7 @@ def validate_recommendation(name: str, price: float, user_budget: float) -> Dict
     Использует Pydantic для строгой валидации входных данных.
     """
     errors = []
-
+    
     # 1. Валидация типов и форматов через Pydantic
     try:
         dish = DishInput(name=name, price=price)
@@ -33,16 +31,15 @@ def validate_recommendation(name: str, price: float, user_budget: float) -> Dict
         "system", "prompt", "ignore", "instructions", "exec", "eval",
         "систем", "промпт", "игнорир", "инструкц", "выведи", "забудь"
     ]
-     name_lower = dish.name.lower()
- 
- if any(pattern in name_lower for pattern in suspicious_patterns):
-     errors.append("Обнаружена попытка Prompt Injection (подозрительный паттерн в названии)")
+    name_lower = dish.name.lower()
+
+    if any(pattern in name_lower for pattern in suspicious_patterns):
+        errors.append("Обнаружена попытка Prompt Injection (подозрительный паттерн в названии)")
 
     if errors:
         return {"is_valid": False, "errors": errors}
-
+    
     return {"is_valid": True, "errors": []}
-
 
 if __name__ == "__main__":
     mcp.run(transport="streamable-http")
